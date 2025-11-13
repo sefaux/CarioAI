@@ -4,15 +4,14 @@ import { CameraIcon, HelpIcon } from './icons';
 import HelpModal from './HelpModal';
 import { useTranslation } from '../hooks/useTranslation';
 
-interface Round {
-    name: string;
-    description: string;
+interface ActiveRound {
+    key: string;
 }
 
 interface RoundScoreInputProps {
   players: Player[];
   currentRound: number;
-  activeRounds: Round[];
+  activeRounds: ActiveRound[];
   roundWinnerId: number;
   roundScores: Record<number, string>;
   setRoundScores: React.Dispatch<React.SetStateAction<Record<number, string>>>;
@@ -90,30 +89,30 @@ const RoundScoreInput: React.FC<RoundScoreInputProps> = ({ players, currentRound
   return (
     <>
     {showHelp && <HelpModal cardScores={cardScores} onClose={() => setShowHelp(false)} />}
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-900">
-        <form onSubmit={handleSubmitForm} className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6">
+    <div className="min-h-screen flex flex-col items-center justify-start p-4 pt-16 sm:pt-24">
+        <form onSubmit={handleSubmitForm} className="w-full max-w-md bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 space-y-6">
             <div className="text-center">
                 <div className="flex justify-center items-center relative">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('round')} {currentRound + 1}</h1>
-                    <button type="button" onClick={() => setShowHelp(true)} className="absolute right-0 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                    <h1 className="text-3xl font-bold text-gray-900">{t('round')} {currentRound + 1}</h1>
+                    <button type="button" onClick={() => setShowHelp(true)} className="absolute right-0 text-gray-500 hover:text-gray-900">
                         <HelpIcon />
                     </button>
                 </div>
-                <p className="text-xl text-blue-600 dark:text-blue-400 font-semibold">{round.name}</p>
-                 <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">{round.description}</p>
+                <p className="text-xl text-blue-600 font-semibold">{t(`roundName_${round.key}`)}</p>
+                 <p className="text-gray-500 mt-1 text-sm">{t(`roundDescription_${round.key}`)}</p>
             </div>
             
-            {error && <div className="p-3 bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 rounded-md text-center">{error}</div>}
-            {isLoading && <div className="p-3 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 rounded-md text-center">{t('analyzingCards')}</div>}
+            {error && <div className="p-3 bg-red-100 text-red-700 rounded-md text-center">{error}</div>}
+            {isLoading && <div className="p-3 bg-blue-100 text-blue-700 rounded-md text-center">{t('analyzingCards')}</div>}
 
             <div className="space-y-4">
-                <div className="flex items-center justify-between py-3 px-4 bg-green-100 dark:bg-green-900/50 rounded-lg">
-                    <span className="text-lg font-bold text-green-700 dark:text-green-400">{winner?.name} ({t('winner')})</span>
-                    <span className="text-lg font-bold text-green-700 dark:text-green-400">0 {t('scorePoints')}</span>
+                <div className="flex items-center justify-between py-3 px-4 bg-green-100 rounded-lg">
+                    <span className="text-lg font-bold text-green-700">{winner?.name} ({t('winner')})</span>
+                    <span className="text-lg font-bold text-green-700">0 {t('scorePoints')}</span>
                 </div>
                 {nonWinnerPlayers.map((player, index) => (
                     <div key={player.id} className="flex items-center justify-between space-x-2">
-                        <label htmlFor={`score-${player.id}`} className="text-gray-900 dark:text-white text-lg flex-shrink-0">{player.name}</label>
+                        <label htmlFor={`score-${player.id}`} className="text-gray-900 text-lg flex-shrink-0">{player.name}</label>
                         <div className="flex items-center space-x-2">
                             <input
                                 id={`score-${player.id}`}
@@ -127,11 +126,11 @@ const RoundScoreInput: React.FC<RoundScoreInputProps> = ({ players, currentRound
                                 enterKeyHint={areAllScoresEntered ? 'done' : 'next'}
                                 value={roundScores[player.id] || ''}
                                 onChange={(e) => handleScoreChange(player.id, e.target.value)}
-                                className="w-24 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md px-2 py-2 text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-24 bg-gray-200 text-gray-900 border border-gray-300 rounded-md px-2 py-2 text-center text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 placeholder={t('scorePoints')}
                                 required
                             />
-                            <button type="button" onClick={() => onStartScan(player.id)} className="p-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-md text-gray-900 dark:text-white">
+                            <button type="button" onClick={() => onStartScan(player.id)} className="p-2 bg-gray-200 hover:bg-gray-300 rounded-md text-gray-900">
                                 <CameraIcon />
                             </button>
                         </div>
@@ -142,7 +141,7 @@ const RoundScoreInput: React.FC<RoundScoreInputProps> = ({ players, currentRound
             <button
                 type="submit"
                 disabled={!areAllScoresEntered || isLoading}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg disabled:bg-gray-500 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-all duration-200 text-lg"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg disabled:bg-gray-500 disabled:cursor-not-allowed transition-all duration-200 text-lg"
             >
                 {t('recordScores')}
             </button>

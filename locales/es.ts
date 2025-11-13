@@ -11,6 +11,10 @@ export const es = {
   cardScoresForScanner: 'Puntajes de Cartas (para Escáner)',
   gameInstructions: 'Instrucciones del Juego',
   startGame: 'Empezar Juego',
+  settings: 'Ajustes',
+  language: 'Idioma',
+  rounds: 'Rondas',
+  scores: 'Puntajes',
 
   // RoundWinnerSelection
   round: 'Ronda',
@@ -83,5 +87,27 @@ export const es = {
   goodLuck: '¡Buena suerte!',
 
   // Errors
-  cardRecognitionError: 'No se pudieron reconocer las cartas. Intenta con una mejor foto.'
+  cardRecognitionError: 'No se pudieron reconocer las cartas. Intenta con una mejor foto.',
+
+  // Rounds
+  roundName_two_sets: "2 Tríos",
+  roundDescription_two_sets: "2 grupos de 3 cartas del mismo valor",
+  roundName_one_set_one_run: "1 Trío y 1 Escala",
+  roundDescription_one_set_one_run: "1 grupo de 3 cartas iguales y 1 escala de 4 cartas",
+  roundName_two_runs: "2 Escalas",
+  roundDescription_two_runs: "2 escaleras de 4 cartas",
+  roundName_three_sets: "3 Tríos",
+  roundDescription_three_sets: "3 grupos de 3 cartas del mismo valor",
+  roundName_two_sets_one_run: "2 Tríos y 1 Escala",
+  roundDescription_two_sets_one_run: "2 grupos de 3 cartas iguales y 1 escala de 4 cartas",
+  roundName_one_set_two_runs: "1 Trío y 2 Escalas",
+  roundDescription_one_set_two_runs: "1 grupo de 3 cartas iguales y 2 escaleras de 4 cartas",
+  roundName_three_runs: "3 Escalas",
+  roundDescription_three_runs: "3 escaleras de 4 cartas",
+  roundName_four_sets: "4 Tríos",
+  roundDescription_four_sets: "4 grupos de 3 cartas del mismo valor",
+  roundName_dirty_run: "Escala Sucia",
+  roundDescription_dirty_run: "1 escalera de 13 cartas (puede usar Jokers)",
+  roundName_royal_run: "Escala Real",
+  roundDescription_royal_run: "1 escalera de 13 cartas del mismo palo (sin Jokers)"
 };

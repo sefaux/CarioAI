@@ -7,22 +7,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       body {
+        background-image: url('https://www.publicdomainpictures.net/pictures/160000/velka/scattered-playing-cards.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
     </style>
-    <script>
-        // Evita FOUC (Flash of Unstyled Content) estableciendo la clase del tema antes de renderizar
-        (function() {
-            const theme = localStorage.getItem('cariocai-theme');
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (theme === 'dark' || (!theme && prefersDark)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        })();
-    </script>
 <script type="importmap">
 {
   "imports": {
@@ -33,9 +25,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+<body class="text-gray-900">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
 </body>

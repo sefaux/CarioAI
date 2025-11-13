@@ -38,30 +38,30 @@ const ScanConfirmation: React.FC<ScanConfirmationProps> = ({ image, cards, score
 
     return (
         <div className="fixed inset-0 bg-gray-900/80 backdrop-blur-sm flex flex-col items-center justify-center p-4 z-50">
-            <div className="w-full max-w-lg bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 space-y-4">
-                <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white">{t('confirmScore')}</h2>
+            <div className="w-full max-w-lg bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 space-y-4">
+                <h2 className="text-2xl font-bold text-center text-gray-900">{t('confirmScore')}</h2>
                 
                 <div className="flex flex-col md:flex-row gap-4 items-start">
                     <div className="w-full md:w-1/3">
-                        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('capture')}</h3>
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">{t('capture')}</h3>
                         <img src={image} alt="Cartas escaneadas" className="rounded-lg w-full" />
                     </div>
                     <div className="w-full md:w-2/3">
-                        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">{t('detectedCardsEditable')}</h3>
-                        <div className="bg-gray-100 dark:bg-gray-700/50 p-3 rounded-lg max-h-48 overflow-y-auto space-y-2">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-2">{t('detectedCardsEditable')}</h3>
+                        <div className="bg-gray-100 p-3 rounded-lg max-h-48 overflow-y-auto space-y-2">
                             {editedCards.map((card, index) => (
                                 <div key={index} className="flex items-center justify-between space-x-2">
                                     <input 
                                         type="text" 
                                         value={card.rank} 
                                         onChange={(e) => handleCardChange(index, 'rank', e.target.value.toUpperCase())}
-                                        className="w-20 bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1 text-center font-mono"
+                                        className="w-20 bg-gray-200 text-gray-900 border border-gray-300 rounded-md px-2 py-1 text-center font-mono"
                                         placeholder={t('rank')}
                                     />
                                     <select
                                         value={card.suit}
                                         onChange={(e) => handleCardChange(index, 'suit', e.target.value)}
-                                        className="bg-gray-200 dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md px-2 py-1.5 appearance-none text-center"
+                                        className="bg-gray-200 text-gray-900 border border-gray-300 rounded-md px-2 py-1.5 appearance-none text-center"
                                         style={{fontSize: '1.2rem'}}
                                     >
                                         <option value="Hearts">♥️</option>
@@ -75,7 +75,7 @@ const ScanConfirmation: React.FC<ScanConfirmationProps> = ({ image, cards, score
                                     </button>
                                 </div>
                             ))}
-                            {editedCards.length === 0 && <p className="text-gray-500 dark:text-gray-400 text-center">{t('noCardsAddOne')}</p>}
+                            {editedCards.length === 0 && <p className="text-gray-500 text-center">{t('noCardsAddOne')}</p>}
                         </div>
                         <button onClick={handleAddCard} className="w-full mt-2 flex items-center justify-center space-x-2 bg-blue-500/80 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
                            <PlusIcon /> <span>{t('addCard')}</span>
@@ -83,9 +83,9 @@ const ScanConfirmation: React.FC<ScanConfirmationProps> = ({ image, cards, score
                     </div>
                 </div>
 
-                <div className="text-center bg-gray-100 dark:bg-gray-900/50 p-4 rounded-lg">
-                    <p className="text-gray-500 dark:text-gray-400 text-lg">{t('totalScore')}</p>
-                    <p className="text-4xl font-bold text-blue-600 dark:text-blue-400">{editedScore}</p>
+                <div className="text-center bg-gray-100 p-4 rounded-lg">
+                    <p className="text-gray-500 text-lg">{t('totalScore')}</p>
+                    <p className="text-4xl font-bold text-blue-600">{editedScore}</p>
                 </div>
 
                 <div className="flex justify-center items-center space-x-4 pt-2">

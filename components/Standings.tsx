@@ -1,21 +1,24 @@
 import React, { useState, useMemo } from 'react';
-import { Player } from '../types';
+// FIX: Import GameSettings to use in the component's props.
+import { Player, GameSettings } from '../types';
 import { CrownIcon } from './icons';
 import { useTranslation } from '../hooks/useTranslation';
+import { ROUNDS_DATA } from '../constants';
 
-interface Round {
-    name: string;
-    description: string;
+interface ActiveRound {
+    key: string;
 }
 
 interface StandingsProps {
   players: Player[];
   currentRound: number;
-  activeRounds: Round[];
+  activeRounds: ActiveRound[];
   onNextRound: () => void;
+  // FIX: Add gameSettings to the component's props.
+  gameSettings: GameSettings;
 }
 
-const Standings: React.FC<StandingsProps> = ({ players, currentRound, activeRounds, onNextRound }) => {
+const Standings: React.FC<StandingsProps> = ({ players, currentRound, activeRounds, onNextRound, gameSettings }) => {
   const [activeTab, setActiveTab] = useState<'standings' | 'scores'>('standings');
   const { t } = useTranslation();
 
@@ -30,13 +33,18 @@ const Standings: React.FC<StandingsProps> = ({ players, currentRound, activeRoun
   
   const isLastRound = currentRound === activeRounds.length - 1;
 
+  const currentGlobalRoundIndex = useMemo(() => 
+    ROUNDS_DATA.findIndex(r => r.key === activeRounds[currentRound]?.key),
+    [currentRound, activeRounds]
+  );
+
   const TabButton: React.FC<{tab: 'standings' | 'scores', children: React.ReactNode}> = ({ tab, children }) => (
     <button
         onClick={() => setActiveTab(tab)}
         className={`w-1/2 py-3 text-center font-semibold text-lg transition-colors duration-200 rounded-t-lg ${
             activeTab === tab 
-            ? 'bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400' 
-            : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-600'
+            ? 'bg-white/90 backdrop-blur-md text-blue-600' 
+            : 'bg-gray-200/80 text-gray-600 hover:bg-gray-300/80'
         }`}
     >
         {children}
@@ -44,11 +52,11 @@ const Standings: React.FC<StandingsProps> = ({ players, currentRound, activeRoun
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen p-4 sm:p-6 lg:p-8 pt-8">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('endOfRound')} {currentRound + 1}</h1>
-            <p className="text-xl text-gray-500 dark:text-gray-400">{activeRounds[currentRound].name}</p>
+        <div className="text-center mb-6 bg-white/90 backdrop-blur-md rounded-2xl p-4 shadow-lg">
+            <h1 className="text-3xl font-bold text-gray-900">{t('endOfRound')} {currentRound + 1}</h1>
+            <p className="text-xl text-gray-500">{t(`roundName_${activeRounds[currentRound].key}`)}</p>
         </div>
 
         <div className="flex">
@@ -56,24 +64,24 @@ const Standings: React.FC<StandingsProps> = ({ players, currentRound, activeRoun
             <TabButton tab="scores">{t('scoreSheet')}</TabButton>
         </div>
 
-        <div className="bg-white dark:bg-gray-800 rounded-b-2xl shadow-xl p-4 sm:p-6">
+        <div className="bg-white/90 backdrop-blur-md rounded-b-2xl shadow-xl p-4 sm:p-6">
             {activeTab === 'standings' ? (
                 <div className="space-y-3">
                     {sortedPlayers.map((player, index) => (
-                        <div key={player.id} className={`flex items-center justify-between p-4 rounded-lg ${index === 0 ? 'bg-green-100 dark:bg-green-900/50' : 'bg-gray-100 dark:bg-gray-700/50'}`}>
+                        <div key={player.id} className={`flex items-center justify-between p-4 rounded-lg ${index === 0 ? 'bg-green-100/80' : 'bg-gray-100/80'}`}>
                             <div className="flex items-center space-x-4">
-                                <span className={`text-xl font-bold ${index === 0 ? 'text-yellow-600 dark:text-yellow-400' : 'text-gray-500 dark:text-gray-400'}`}>#{index + 1}</span>
-                                <span className="text-lg text-gray-900 dark:text-white">{player.name}</span>
-                                {index === 0 && <div className="text-yellow-500 dark:text-yellow-400"><CrownIcon/></div>}
+                                <span className={`text-xl font-bold ${index === 0 ? 'text-yellow-600' : 'text-gray-500'}`}>#{index + 1}</span>
+                                <span className="text-lg text-gray-900">{player.name}</span>
+                                {index === 0 && <div className="text-yellow-500"><CrownIcon/></div>}
                             </div>
-                            <span className="text-xl font-bold text-gray-900 dark:text-white">{calculateTotal(player)} {t('scorePoints')}</span>
+                            <span className="text-xl font-bold text-gray-900">{calculateTotal(player)} {t('scorePoints')}</span>
                         </div>
                     ))}
                 </div>
             ) : (
                 <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-left text-gray-600 dark:text-gray-300">
-                        <thead className="text-xs text-gray-500 dark:text-gray-400 uppercase bg-gray-200 dark:bg-gray-700/50">
+                    <table className="w-full text-sm text-left text-gray-600">
+                        <thead className="text-xs text-gray-500 uppercase bg-gray-200/80">
                         <tr>
                             <th scope="col" className="px-6 py-3">{t('round')}</th>
                             {players.map(player => (
@@ -82,18 +90,21 @@ const Standings: React.FC<StandingsProps> = ({ players, currentRound, activeRoun
                         </tr>
                         </thead>
                         <tbody>
-                        {activeRounds.map((round, roundIndex) => (
-                            <tr key={roundIndex} className={`border-b border-gray-200 dark:border-gray-700 ${roundIndex > currentRound ? 'opacity-50' : ''}`}>
-                            <td className="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">{round.name}</td>
-                            {players.map((player) => (
-                                <td key={player.id} className="px-6 py-4 text-center">
-                                    {player.scores[roundIndex] ?? '-'}
-                                </td>
-                            ))}
-                            </tr>
-                        ))}
+                        {ROUNDS_DATA.map((round, globalRoundIndex) => {
+                            if (!gameSettings.enabledRounds.includes(round.key)) return null;
+                            return (
+                                <tr key={globalRoundIndex} className={`border-b border-gray-300/50 ${globalRoundIndex > currentGlobalRoundIndex ? 'opacity-50' : ''}`}>
+                                <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{t(`roundName_${round.key}`)}</td>
+                                {players.map((player) => (
+                                    <td key={player.id} className="px-6 py-4 text-center">
+                                        {player.scores[globalRoundIndex] ?? '-'}
+                                    </td>
+                                ))}
+                                </tr>
+                            );
+                        })}
                         </tbody>
-                        <tfoot className="bg-gray-200 dark:bg-gray-700/50 text-gray-900 dark:text-white font-bold">
+                        <tfoot className="bg-gray-200/80 text-gray-900 font-bold">
                         <tr>
                             <td className="px-6 py-4 uppercase">{t('total')}</td>
                             {players.map(player => (

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Player, GamePhase, GameSettings, Card } from './types';
-import { ROUNDS_WITH_DESCRIPTIONS, DEFAULT_CARD_SCORES } from './constants';
+import { ROUNDS_DATA, DEFAULT_CARD_SCORES } from './constants';
 import PlayerSetup from './components/PlayerSetup';
 import RoundWinnerSelection from './components/RoundWinnerSelection';
 import RoundScoreInput from './components/RoundScoreInput';
@@ -35,7 +35,7 @@ const App: React.FC = () => {
     }
     return {
         cardScores: DEFAULT_CARD_SCORES,
-        enabledRounds: ROUNDS_WITH_DESCRIPTIONS.map(r => r.name),
+        enabledRounds: ROUNDS_DATA.map(r => r.key),
     };
   });
   const [roundScores, setRoundScores] = useState<Record<number, string>>({});
@@ -54,13 +54,13 @@ const App: React.FC = () => {
     }
   }, [gameSettings]);
 
-  const activeRounds = ROUNDS_WITH_DESCRIPTIONS.filter(r => gameSettings.enabledRounds.includes(r.name));
+  const activeRounds = ROUNDS_DATA.filter(r => gameSettings.enabledRounds.includes(r.key));
 
   const handleAddPlayer = (name: string) => {
     const newPlayer: Player = {
       id: Date.now(),
       name,
-      scores: Array(ROUNDS_WITH_DESCRIPTIONS.length).fill(null),
+      scores: Array(ROUNDS_DATA.length).fill(null),
     };
     setPlayers(prev => [...prev, newPlayer]);
   };
@@ -93,7 +93,10 @@ const App: React.FC = () => {
      setPlayers(prevPlayers => 
         prevPlayers.map(player => {
             const newScores = [...player.scores];
-            newScores[currentRound] = 0; // Or some other indicator for skipped
+            const roundIndex = ROUNDS_DATA.findIndex(r => r.key === activeRounds[currentRound].key);
+            if (roundIndex !== -1) {
+              newScores[roundIndex] = 0;
+            }
             return { ...player, scores: newScores };
         })
     );
@@ -109,8 +112,10 @@ const App: React.FC = () => {
     setPlayers(prevPlayers => 
         prevPlayers.map((player, index) => {
             const newScores = [...player.scores];
-            const roundIndex = ROUNDS_WITH_DESCRIPTIONS.findIndex(r => r.name === activeRounds[currentRound].name);
-            newScores[roundIndex] = scoresForRound[index];
+            const roundIndex = ROUNDS_DATA.findIndex(r => r.key === activeRounds[currentRound].key);
+            if (roundIndex !== -1) {
+              newScores[roundIndex] = scoresForRound[index];
+            }
             return { ...player, scores: newScores };
         })
     );
@@ -241,7 +246,8 @@ const App: React.FC = () => {
         }
         return <RoundScoreInput players={players} currentRound={currentRound} roundWinnerId={roundWinnerId} onRecordScores={handleRecordScores} onStartScan={handleStartScan} roundScores={roundScores} setRoundScores={setRoundScores} isLoading={isLoading} error={error} setError={setError} cardScores={gameSettings.cardScores} activeRounds={activeRounds} />;
       case GamePhase.Standings:
-        return <Standings players={players} currentRound={currentRound} onNextRound={handleNextRound} activeRounds={activeRounds} />;
+        // FIX: Pass gameSettings prop to the Standings component.
+        return <Standings players={players} currentRound={currentRound} onNextRound={handleNextRound} activeRounds={activeRounds} gameSettings={gameSettings} />;
       case GamePhase.Finished:
         return <GameEnd players={players} onNewGame={handleNewGame} />;
       case GamePhase.Scanning:

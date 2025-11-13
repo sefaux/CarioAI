@@ -20,27 +20,27 @@ const GameEnd: React.FC<GameEndProps> = ({ players, onNewGame }) => {
   const winners = sortedPlayers.filter(p => calculateTotal(p) === winnerScore);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-100 dark:bg-gray-900">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 text-center space-y-6">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white">{t('gameFinished')}</h1>
+    <div className="min-h-screen flex flex-col items-center justify-start p-4 pt-16 sm:pt-24">
+      <div className="w-full max-w-md bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 text-center space-y-6">
+        <h1 className="text-4xl font-bold text-gray-900">{t('gameFinished')}</h1>
         
         <div className="space-y-2">
-            <h2 className="text-2xl font-semibold text-yellow-500 dark:text-yellow-400">{winners.length > 1 ? t('winnersAre') : t('winnerIs')}</h2>
+            <h2 className="text-2xl font-semibold text-yellow-500">{winners.length > 1 ? t('winnersAre') : t('winnerIs')}</h2>
             {winners.map(winner => (
-                 <div key={winner.id} className="flex items-center justify-center space-x-2 text-3xl font-bold text-green-600 dark:text-green-400">
+                 <div key={winner.id} className="flex items-center justify-center space-x-2 text-3xl font-bold text-green-600">
                     <CrownIcon />
                     <span>{winner.name}</span>
                  </div>
             ))}
-            <p className="text-gray-500 dark:text-gray-400">{t('withPoints', { score: winnerScore })}</p>
+            <p className="text-gray-500">{t('withPoints', { score: winnerScore })}</p>
         </div>
 
         <div>
-            <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-700 pb-2 mb-3">{t('finalResults')}</h3>
-            <ul className="divide-y divide-gray-200 dark:divide-gray-700 text-left">
+            <h3 className="text-xl font-semibold text-gray-700 border-b border-gray-200 pb-2 mb-3">{t('finalResults')}</h3>
+            <ul className="divide-y divide-gray-200 text-left">
                 {sortedPlayers.map((player, index) => (
                     <li key={player.id} className="flex justify-between items-center py-3">
-                        <span className={`text-lg ${winners.some(w => w.id === player.id) ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white'}`}>
+                        <span className={`text-lg ${winners.some(w => w.id === player.id) ? 'text-green-600' : 'text-gray-900'}`}>
                             {index + 1}. {player.name}
                         </span>
                         <span className="font-semibold text-lg">{calculateTotal(player)} {t('scorePoints')}</span>

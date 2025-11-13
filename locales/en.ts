@@ -11,6 +11,10 @@ export const en = {
   cardScoresForScanner: 'Card Scores (for Scanner)',
   gameInstructions: 'Game Instructions',
   startGame: 'Start Game',
+  settings: 'Settings',
+  language: 'Language',
+  rounds: 'Rounds',
+  scores: 'Scores',
 
   // RoundWinnerSelection
   round: 'Round',
@@ -74,7 +78,7 @@ export const en = {
   gameRule4: 'Once a player has melded, they must wait a full turn before they can "lay off" additional cards on their own melds or on those of other players who have also melded.',
   gameRule5: 'The round ends when a player has no cards left in their hand. To signal this, they discard their last card face down on the discard pile. That player wins the round!',
   jokerRules: 'Joker Rules:',
-  jokerRule1: 'No more than one Joker can be used per set (trio) or run (scale).',
+  jokerRule1: 'No more than one Joker can be used per set or run.',
   jokerRule2: 'Jokers at the ends of a run can be moved. For example, in a run of JOKER-3-4-5, the Joker can be replaced by a 2 or a 6, allowing the Joker to be moved to another position in the same run.',
   scoring: 'Scoring:',
   scoringRule1: 'The player who wins the round (runs out of cards) gets 0 points.',
@@ -83,5 +87,27 @@ export const en = {
   goodLuck: 'Good luck!',
   
   // Errors
-  cardRecognitionError: 'Could not recognize the cards. Please try with a better picture.'
+  cardRecognitionError: 'Could not recognize the cards. Please try with a better picture.',
+
+  // Rounds
+  roundName_two_sets: "2 Sets",
+  roundDescription_two_sets: "2 groups of 3 cards of the same rank",
+  roundName_one_set_one_run: "1 Set & 1 Run",
+  roundDescription_one_set_one_run: "1 group of 3 equal cards and 1 run of 4 cards",
+  roundName_two_runs: "2 Runs",
+  roundDescription_two_runs: "2 runs of 4 cards",
+  roundName_three_sets: "3 Sets",
+  roundDescription_three_sets: "3 groups of 3 cards of the same rank",
+  roundName_two_sets_one_run: "2 Sets & 1 Run",
+  roundDescription_two_sets_one_run: "2 groups of 3 equal cards and 1 run of 4 cards",
+  roundName_one_set_two_runs: "1 Set & 2 Runs",
+  roundDescription_one_set_two_runs: "1 group of 3 equal cards and 2 runs of 4 cards",
+  roundName_three_runs: "3 Runs",
+  roundDescription_three_runs: "3 runs of 4 cards",
+  roundName_four_sets: "4 Sets",
+  roundDescription_four_sets: "4 groups of 3 cards of the same rank",
+  roundName_dirty_run: "Dirty Run",
+  roundDescription_dirty_run: "1 run of 13 cards (can use Jokers)",
+  roundName_royal_run: "Royal Run",
+  roundDescription_royal_run: "1 run of 13 cards of the same suit (no Jokers)"
 };
