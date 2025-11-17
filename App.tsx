@@ -81,9 +81,6 @@ const App: React.FC = () => {
       } catch (error) {
         console.error("Failed to save game state", error);
       }
-    } else if (gamePhase === GamePhase.Setup) {
-      localStorage.removeItem(GAME_STATE_KEY);
-      setSavedGameExists(false);
     }
   }, [players, gamePhase, currentRound, roundWinnerId, roundScores]);
 
@@ -192,6 +189,8 @@ const App: React.FC = () => {
   };
 
   const handleNewGame = () => {
+    localStorage.removeItem(GAME_STATE_KEY);
+    setSavedGameExists(false);
     setPlayers([]);
     setCurrentRound(0);
     setRoundWinnerId(null);
@@ -267,11 +266,19 @@ const App: React.FC = () => {
             }
         };
 
+        const prompt = `Your task is to identify playing cards from an image and return them as a JSON object. Follow these rules precisely:
+1. List all visible cards.
+2. For each card, identify its rank and suit.
+3. Valid Ranks: 'A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'Joker'.
+4. Valid Suits: 'Hearts', 'Diamonds', 'Clubs', 'Spades', 'Joker'. A Joker card should have both rank and suit as 'Joker'.
+5. **Most Important Rule:** You must NOT fail. If a card is difficult to identify for any reason (e.g., it's blurry, angled, poorly lit, partially hidden, or unclear), you MUST classify its rank and suit as 'Joker'. It is better to return 'Joker' than to be uncertain or fail.
+6. Return your findings in the exact JSON format specified by the schema.`;
+
         const response = await ai.models.generateContent({
             model,
             contents: {
                 parts: [
-                    { text: "Analyze the playing cards in this image. Identify the rank and suit for each. Valid ranks: A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, Joker. Valid suits: Hearts, Diamonds, Clubs, Spades, Joker. CRITICAL RULE: If a card is blurry, partially obscured, or its rank cannot be identified with high confidence, you MUST classify its rank as 'Joker'. Do not fail the request for any unidentifiable card. Provide the output in the requested JSON format." },
+                    { text: prompt },
                     { inlineData: { mimeType: 'image/jpeg', data: imageData.split(',')[1] } }
                 ]
             },
