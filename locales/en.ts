@@ -16,6 +16,8 @@ export const en = {
   rounds: 'Rounds',
   scores: 'Scores',
   continueGame: 'Continue Game',
+  selectAll: 'Select All',
+  deselectAll: 'Deselect All',
 
   // RoundWinnerSelection
   round: 'Round',

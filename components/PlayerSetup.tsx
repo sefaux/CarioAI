@@ -36,6 +36,20 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, gameSettings, se
     }
   };
 
+  const handleSelectAll = () => {
+    setGameSettings(prev => ({
+        ...prev,
+        enabledRounds: ROUNDS_DATA.map(r => r.key)
+    }));
+  };
+
+  const handleDeselectAll = () => {
+      setGameSettings(prev => ({
+          ...prev,
+          enabledRounds: []
+      }));
+  };
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4" onClick={onClose}>
       <div className="w-full max-w-lg bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 space-y-4" onClick={e => e.stopPropagation()}>
@@ -66,6 +80,14 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ onClose, gameSettings, se
 
             <div>
                 <h3 className="font-semibold text-lg text-gray-800 mb-2 border-b pb-1">{t('rounds')}</h3>
+                <div className="flex space-x-2 mb-2">
+                    <button onClick={handleSelectAll} className="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-3 rounded-full">
+                        {t('selectAll')}
+                    </button>
+                    <button onClick={handleDeselectAll} className="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-1 px-3 rounded-full">
+                        {t('deselectAll')}
+                    </button>
+                </div>
                  <div className="grid grid-cols-2 gap-2 text-sm">
                     {ROUNDS_DATA.map(round => (
                         <label key={round.key} className="flex items-center space-x-2 p-1 rounded-md hover:bg-gray-100">

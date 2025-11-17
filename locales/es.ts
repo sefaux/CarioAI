@@ -16,6 +16,8 @@ export const es = {
   rounds: 'Rondas',
   scores: 'Puntajes',
   continueGame: 'Continuar Juego',
+  selectAll: 'Marcar Todas',
+  deselectAll: 'Desmarcar Todas',
 
   // RoundWinnerSelection
   round: 'Ronda',
